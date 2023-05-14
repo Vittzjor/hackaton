@@ -1,12 +1,9 @@
 import shutil
-from pathlib import Path
-
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
 import models
 import schemas
 from uuid import uuid4
-import easyocr
 
 
 def get_user(db: Session, user_id: int):
