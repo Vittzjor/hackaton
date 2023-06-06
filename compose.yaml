@@ -1,5 +1,8 @@
 version: '3'
 
+networks:
+  main_network: {}
+
 services:
   db:
     container_name: fastapi
@@ -13,12 +16,15 @@ services:
       - ./pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - main_network
+
   app:
     build: .
     container_name: fastapi-app
-    network_mode: host
     depends_on:
       - db
     ports:
       - "8000:8000"
-    command: bash -c "uvicorn main:app"
+    networks:
+      - main_network
