@@ -1,0 +1,7 @@
+fastapi==0.95.1
+uvicorn[standard]==0.22.0
+SQLAlchemy==2.0.13
+uuid==1.30
+easyocr==1.6.2
+psycopg2-binary==2.9.6
+python-multipart==0.0.6

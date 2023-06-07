@@ -1,0 +1,8 @@
+.dockerignore
+.git
+.gitignore
+.idea
+.vscode
+compose.yaml
+Dockerfile
+pgdata

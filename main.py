@@ -1,5 +1,5 @@
 import easyocr
-from fastapi import Depends, FastAPI, HTTPException, File, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
 import crud
@@ -49,7 +49,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 @app.post("/users/{user_id}/items/", response_model=schemas.Item)
 def create_item_for_user(
-        user_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)
+    user_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)
 ):
     return crud.create_user_item(db=db, item=item, user_id=user_id)
 
@@ -63,7 +63,7 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile):
     path = await crud.save_file(file)
-    reader = easyocr.Reader(['ru'])
+    reader = easyocr.Reader(["ru"])
     result = reader.readtext(path, detail=0, paragraph=True)
     print(result)
     return path

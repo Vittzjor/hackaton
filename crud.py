@@ -1,9 +1,11 @@
 import shutil
+from uuid import uuid4
+
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
+
 import models
 import schemas
-from uuid import uuid4
 
 
 def get_user(db: Session, user_id: int):
@@ -40,10 +42,10 @@ def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
 
 
 async def save_file(upload_file: UploadFile) -> str:
-    destination = './user-files/' + str(uuid4()) + '.jpg'
+    destination = "./user-files/" + str(uuid4()) + ".jpg"
 
     try:
-        with open(destination, 'wb') as buffer:
+        with open(destination, "wb") as buffer:
             shutil.copyfileobj(upload_file.file, buffer)
     finally:
         upload_file.file.close()

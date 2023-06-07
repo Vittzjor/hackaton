@@ -1,9 +1,26 @@
-FROM python:3.9.0-slim
+FROM python:3.10-slim
 
-ENV PYTHONUNBUFFERED 1
+EXPOSE 3000
 
-EXPOSE 8000
-WORKDIR ./
+ENV PYTHONDONTWRITEBYTECODE=1
 
-COPY . /
-RUN pip install -e .
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Creates new user
+RUN adduser -u 1000 --disabled-password --gecos "" appuser && chown -R appuser /app
+
+# Install deps
+RUN apt update && apt full-upgrade -y && apt clean
+
+# Install pip requirements
+RUN pip install --no-cache-dir -U pip setuptools wheel
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /app
+
+USER appuser
+
+CMD ["uvicorn", "--host", "0.0.0.0", "main:app"]
