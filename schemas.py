@@ -1,36 +1,32 @@
-from typing import Union
+from typing import List
 
 from pydantic import BaseModel
 
 
-class ItemBase(BaseModel):
-    image: str
+class MessageBase(BaseModel):
+    request: str
+    response: str
 
+class MessageCreate(BaseModel):
+    request: str
 
-class ItemCreate(ItemBase):
-    pass
-
-
-class Item(ItemBase):
+class Message(MessageBase):
     id: int
-    owner_id: int
+    response: str
+    owner_id: int   
 
     class Config:
         orm_mode = True
 
-
 class UserBase(BaseModel):
-    email: str
-
+    pass
 
 class UserCreate(UserBase):
-    password: str
-
+    pass
 
 class User(UserBase):
     id: int
-    is_active: bool
-    items: list[Item] = []
+    messages: List[Message] = []
 
     class Config:
         orm_mode = True
