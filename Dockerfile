@@ -7,18 +7,26 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    build-essential \
+    swig \
+    libgl1-mesa-glx \
+    && rm -rf /var/lib/apt/lists/*
+
 # Creates new user
 RUN adduser -u 1000 --disabled-password --gecos "" appuser && chown -R appuser /app
 
-# Install system dependencies
-RUN apt update && apt full-upgrade -y && apt install -y gcc libpq-dev && apt clean
-
-# Install pip requirements
+# Copy requirements
 COPY requirements.txt .
-RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
+
+# Upgrade pip and install requirements with increased timeout
+RUN pip install --upgrade pip && \
+    pip install --default-timeout=2000 --no-cache-dir -r requirements.txt
 
 COPY . /app
 
 USER appuser
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "--host", "0.0.0.0", "--port", "8000", "main:app"]
